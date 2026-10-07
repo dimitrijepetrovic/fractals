@@ -1,0 +1,21 @@
+[package]
+name = "fractals"
+version = "0.1.0"
+edition = "2024"
+description = "Renders zoom videos into many kinds of fractals, on the CPU or an NVIDIA GPU"
+
+[features]
+default = ["cuda"]
+# GPU rendering through CUDA (needs nvcc at build time and an NVIDIA driver at run time).
+# Build without it: cargo build --release --no-default-features
+cuda = ["dep:cudarc"]
+
+[dependencies]
+anyhow = "1"
+astro-float = "0.9"
+clap = { version = "4", features = ["derive"] }
+cudarc = { version = "0.19", optional = true, default-features = false, features = ["std", "driver", "nvrtc", "cuda-version-from-build-system", "dynamic-loading"] }
+rayon = "1"
+
+[profile.release]
+codegen-units = 1
